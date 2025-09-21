@@ -42,10 +42,9 @@ A full-stack **Business Management System** built to streamline inventory, order
 
 ## 🖼 Screenshots
 
-(Add your screenshots here by uploading them to the repo and linking:)
 
-```
-![Dashboard](./screenshots/Screenshot 2025-09-21 at 22.00.59.png)
+
+![Dashboard](./screenshots/Screenshot%202025-09-21%20at%2022.00.59.png))
 ![Inventory](./screenshots/inventory.png)
 ```
 
