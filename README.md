@@ -44,8 +44,9 @@ A full-stack **Business Management System** built to streamline inventory, order
 
 
 
-![Dashboard](./screenshots/Screenshot%202025-09-21%20at%2022.00.59.png))
-![Inventory](./screenshots/inventory.png)
+![Dashboard](./screenshots/Screenshot%202025-09-21%20at%2022.00.59.png)
+![Inventory](./screenshots/Screenshot%202025-09-21%20at%2022.54.38.png)
+
 ```
 
 ---
