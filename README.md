@@ -55,8 +55,6 @@ A full-stack **Business Management System** built to streamline inventory, order
 
 👉 [Watch the demo video here](#)
 
-*(Add your demo video link if available)*
-
 ---
 
 ## ⚙️ How to Run
@@ -89,7 +87,7 @@ npm start
 ### 4. Open in Browser
 
 * Backend runs on: `http://localhost:8080`
-* Frontend runs on: `http://localhost:3000` (if React)
+* Frontend runs on: `http://localhost:5500`
 
 ---
 
@@ -97,7 +95,6 @@ npm start
 
 * Java, Spring Boot, Hibernate
 * MySQL Database
-* HTML, CSS, JavaScript, React
 * Jasper Reports
 * SMTP for email notifications
 
