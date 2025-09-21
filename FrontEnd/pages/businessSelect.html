@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizManager Pro - Select Business</title>
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #8378f0;
+            --primary-dark: #5649c9;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .header p {
+            color: var(--gray-600);
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        /* Business Cards */
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .business-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .business-card.selected {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        .business-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .business-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .business-icon.production {
+            background: var(--primary);
+        }
+
+        .business-icon.retail {
+            background: var(--success);
+        }
+
+        .business-icon.service {
+            background: var(--warning);
+        }
+
+        .business-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+        }
+
+        .business-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .business-type {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .business-description {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .business-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Add Business Card */
+        .add-business-card {
+            background: var(--gray-100);
+            border: 2px dashed var(--gray-300);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 200px;
+        }
+
+        .add-business-card:hover {
+            background: var(--gray-200);
+            border-color: var(--primary);
+        }
+
+        .add-business-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-business-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .add-business-desc {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        /* Floating Form */
+        .floating-form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-form-container.active {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .floating-form-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+        }
+
+        .floating-form {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .floating-form-container.active .floating-form {
+            transform: scale(1);
+        }
+
+        .floating-form-header {
+            padding: 2rem 2rem 0;
+            text-align: center;
+        }
+
+        .floating-form-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .floating-form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .floating-form-subtitle {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        .floating-form-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4l4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Form error messages */
+        .form-error {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-600);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .floating-form-header,
+            .floating-form-body {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+</style>
+</head>
+<body>
+<div class="main-container">
+    <div class="content-wrapper">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon"><i class="bi bi-building"></i></div>
+                <span>BizManager Pro</span>
+            </div>
+            <h1>Select Your Business</h1>
+            <p>Choose a business to manage or add a new one</p>
+        </div>
+        <div class="content">
+            <div class="business-grid" id="businessContainer">
+                <!-- Hidden Template -->
+                <div id="businessCardTemplate" class="business-card" style="display:none;">
+                    <div class="business-header">
+                        <div class="business-icon production"><i class="bi bi-gear"></i></div>
+                        <span class="business-status status-active">Active</span>
+                    </div>
+                    <h3 class="business-title">Business Name</h3>
+                    <div class="business-type">Business Type</div>
+                    <p class="business-description">Description here...</p>
+                    <div class="business-stats">
+                        <div class="stat"><div class="stat-value">0</div><div class="stat-label">Employees</div></div>
+                        <div class="stat"><div class="stat-value">$0</div><div class="stat-label">Monthly Revenue</div></div>
+                        <div class="stat"><div class="stat-value">0%</div><div class="stat-label">Capacity</div></div>
+                        <div class="stat"><div class="stat-value">$</div><div class="stat-label">currency</div></div>
+                    </div>
+                </div>
+                
+                <!-- Loading state -->
+                <div id="loadingState" class="loading">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <p>Loading your businesses...</p>
+                </div>
+                
+                <!-- Add Business Card -->
+                <div class="business-card add-business-card" id="add-business-btn">
+                    <div class="add-business-icon"><i class="bi bi-plus-lg"></i></div>
+                    <h3 class="add-business-title">Add New Business</h3>
+                    <p class="add-business-desc">Set up a new business profile to get started</p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="cancel-btn">Cancel</button>
+                <button class="btn btn-primary" id="select-btn" disabled>Select Business</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Form -->
+<div class="floating-form-container" id="add-business-form">
+    <div class="floating-form-overlay" id="close-form-btn"></div>
+    <div class="floating-form">
+        <div class="floating-form-header">
+            <div class="floating-form-icon"><i class="bi bi-building"></i></div>
+            <h2 class="floating-form-title">Add New Business</h2>
+            <p class="floating-form-subtitle">Fill in the details to create your business profile</p>
+        </div>
+        <div class="floating-form-body">
+            <form id="business-form">
+                <div class="form-group">
+                    <label class="form-label" for="newBusinessName"><i class="bi bi-building me-1"></i>Business Name *</label>
+                    <input type="text" class="form-control" id="newBusinessName" name="name" placeholder="Enter your business name" required>
+                    <span id="nameError" class="form-error" style="display:none;color:red;"></span>
+                    <div class="form-error" id="nameError"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="businessType"><i class="bi bi-tag me-1"></i>Business Type *</label>
+                    <select class="form-select" id="businessType" name="type" required>
+                        <option value="">Select business type</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Service">Service</option>
+                        <option value="Restaurant">Restaurant</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div class="form-error" id="typeError"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="businessAddress"><i class="bi bi-geo-alt me-1"></i>Business Address *</label>
+                    <textarea class="form-control" id="businessAddress" name="address" rows="3" placeholder="Enter your complete business address" required></textarea>
+                    <div class="form-error" id="addressError"></div>
+                </div>
+                <div id="currencyTypeContainer">
+                    <label for="currencyType" class="form-label">Select Currency</label>
+                    <select class="form-select" id="currencyType" name="currencyType" required>
+                        <option value="">-- Select Currency --</option>
+                    </select>
+                </div>
+                <div id="employeeCheckContainer"> 
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="employeeCheck" name="employeeCheck">
+                        <label class="form-check-label" for="employeeCheck">Check if employees are available</label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-form-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="businessSubmitBtn"><i class="bi bi-plus-circle me-1"></i>Create Business</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module">
+import { apiFetch } from '/js/auth.js';
+
+$(document).ready(function () {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+    
+    // Global variables
+    let selectedBusinessId = null;
+    let selectedBusinessName = null;
+    let selectedBusinessCurrency = null;
+    const $container = $('#businessContainer');
+
+    // Load businesses function - properly implemented
+    async function loadBusinesses() {
+        try {
+            // Show loading state
+            $('#loadingState').show();
+            
+            // Get user data
+            const userData = JSON.parse(localStorage.getItem('user')) || {};
+            const userId = userData.userId;
+            console.log("UserId:", userId);
+
+            if (!userId) {
+                throw new Error('User not logged in');
+            }
+
+            // Fetch businesses from API
+            const response = await apiFetch(`/api/business/user/${userId}`);
+            console.log("API Response:", response);
+
+            // Hide loading state
+            $('#loadingState').hide();
+
+            // Check if response is successful
+            if (!response || response.code !== 200) {
+                throw new Error(response?.message || 'Failed to load businesses');
+            }
+
+            const userBusinesses = response.data || [];
+            console.log("User businesses:", userBusinesses);
+
+            // Clear existing business cards (except template and add button)
+            $container.find('.business-card:not(#businessCardTemplate):not(.add-business-card)').remove();
+
+            // Populate business cards
+            if (userBusinesses.length > 0) {
+                userBusinesses.forEach((businessData) => {
+                    const business = businessData.business || businessData;
+                    console.log("business:",business)
+                    const $card = $('#businessCardTemplate').clone().removeAttr('id').show();
+                    
+                    // Populate card data
+                    
+                    $card.find('.business-title').text(business.name || 'Unknown Business');
+                    $card.find('.business-type').text(business.type || 'Unknown Type');
+                    $card.find('.business-description').text(business.address || 'No description available');
+                    
+                    // Update stats
+                    $card.find('.business-stats .stat').eq(0).find('.stat-value').text(business.employees || 0);
+                    $card.find('.business-stats .stat').eq(1).find('.stat-value').text(`${business.monthlyRevenue || 0}`);
+                    $card.find('.business-stats .stat').eq(2).find('.stat-value').text(`${business.capacity || 0}%`);
+                    $card.find('.business-stats .stat').eq(3).find('.stat-value').text(business.currencyType || '$');
+                    
+                    // Set appropriate icon based on business type
+                    const icon = $card.find('.business-icon');
+                    icon.removeClass('production retail service');
+                    if (business.type === 'Retail') {
+                        icon.addClass('retail').find('i').attr('class', 'bi bi-cart');
+                    } else if (business.type === 'Service') {
+                        icon.addClass('service').find('i').attr('class', 'bi bi-person-check');
+                    } else {
+                        icon.addClass('production').find('i').attr('class', 'bi bi-gear');
+                    }
+
+                    // Set data attributes
+                    $card.attr('data-business-id', business.businessId || business.id);
+                    $card.attr('data-business-name', business.name);
+                    $card.attr('data-business-currency-type', business.currencyType);
+
+                    // Insert before the add business card
+                    $('#add-business-btn').before($card);
+                });
+            } else {
+                // Show empty state
+                const emptyState = `
+                    <div class="empty-state">
+                        <i class="bi bi-building"></i>
+                        <h3>No Businesses Found</h3>
+                        <p>You don't have any businesses yet. Click below to add your first business.</p>
+                    </div>
+                `;
+                $('#add-business-btn').before(emptyState);
+            }
+
+        } catch (error) {
+            console.error('Error loading businesses:', error);
+            $('#loadingState').hide();
+            
+            // Show error state
+            const errorState = `
+                <div class="empty-state">
+                    <i class="bi bi-exclamation-triangle text-danger"></i>
+                    <h3>Error Loading Businesses</h3>
+                    <p>${error.message || 'Failed to load businesses. Please try again.'}</p>
+                    <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+                </div>
+            `;
+            $container.html(errorState + $('#businessCardTemplate')[0].outerHTML + $('#add-business-btn')[0].outerHTML);
+        }
+    }
+
+    // Call loadBusinesses on page load
+    loadBusinesses();
+
+    // Business selection
+    $container.on('click', '.business-card:not(.add-business-card)', function () {
+        console.log("container click")
+        $('.business-card').removeClass('selected');
+        $(this).addClass('selected');
+        $('#select-btn').prop('disabled', false);
+        selectedBusinessId = $(this).data('business-id');
+        selectedBusinessName = $(this).data('business-name');
+        selectedBusinessCurrency = $(this).data('business-currency-type');
+        
+    });
+
+    $('#select-btn').on('click', function () {
+        console.log("select btn",selectedBusinessId)
+
+        if (selectedBusinessId) {
+            const business = {
+                id: selectedBusinessId,
+                name: selectedBusinessName,
+                currencyType: selectedBusinessCurrency
+            };
+            console.log("Selected business:", business);
+            localStorage.setItem('business', JSON.stringify(business));
+            window.location.href = '/pages/dashboard.html';
+        }
+    });
+
+    $('#cancel-btn').on('click', () => window.history.back());
+
+    // Add business popup - using event delegation since the button might be dynamically loaded
+    $(document).on('click', '#add-business-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Add business button clicked'); // Debug log
+        $('#add-business-form').addClass('active');
+        $('body').css('overflow', 'hidden');
+    });
+    
+    // Close form handlers
+    $(document).on('click', '#close-form-btn, #cancel-form-btn', function(e) {
+        e.preventDefault();
+        console.log('Close form button clicked'); // Debug log
+        $('#add-business-form').removeClass('active');
+        $('body').css('overflow', 'auto');
+        $('#business-form')[0].reset();
+        $('.form-error').hide();
+    });
+
+    // Close form when clicking outside the modal
+    $(document).on('click', '.floating-form-overlay', function(e) {
+        if (e.target === this) {
+            $('#add-business-form').removeClass('active');
+            $('body').css('overflow', 'auto');
+            $('#business-form')[0].reset();
+            $('.form-error').hide();
+        }
+    });
+
+    // Close form with ESC key
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $('#add-business-form').hasClass('active')) {
+            $('#add-business-form').removeClass('active');
+            $('body').css('overflow', 'auto');
+            $('#business-form')[0].reset();
+            $('.form-error').hide();
+        }
+    });
+
+    // Load currencies using apiFetch
+    const $currencySelect = $('#currencyType');
+    (async () => {
+        try {
+            const response = await apiFetch('/api/business/currencies');
+            const currencies = response.data || [];
+            $currencySelect.empty().append('<option value="">-- Select Currency --</option>');
+            currencies.forEach(c => {
+                console.log("Currency:", c);
+                $currencySelect.append(`<option value="${c}">${c}</option>`);
+            });
+        } catch (err) {
+            console.error('Failed to load currencies:', err);
+        }
+    })();
+
+    // Business name validation
+    $('#newBusinessName').on('input', async function() {
+        const name = $(this).val().trim();
+        if (!name) return;
+
+        try {
+            const response = await apiFetch(`/api/business/exists?name=${encodeURIComponent(name)}`);
+            const exists = response.data;
+            if (exists) {
+                $('#nameError').text('Business name already exists!').show();
+                $('#businessSubmitBtn').prop('disabled', true);
+            } else {
+                $('#nameError').hide();
+                $('#businessSubmitBtn').prop('disabled', false);
+            }
+        } catch (err) {
+            console.error('Error checking business name:', err);
+        }
+    });
+
+    // Submit new business
+    $('#business-form').on('submit', async function(e) {
+        e.preventDefault();
+        const newBusiness = {
+            name: $('#newBusinessName').val().trim(),
+            type: $('#businessType').val(),
+            address: $('#businessAddress').val().trim(),
+            currencyType: $('#currencyType').val(),
+            isEmployeeExist: $('#employeeCheck').is(':checked')
+        };
+
+        try {
+            const response = await apiFetch('/api/business/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newBusiness)
+            });
+
+            console.log("Response:", response);
+
+            // Check response.code instead of response.ok
+            if (!response || response.code !== 200) {
+                throw new Error(response?.data || 'Failed to create business');
+            }
+
+            alert(response.data); // Shows: "Business registered successfully"
+            localStorage.setItem("business", JSON.stringify(newBusiness));
+            
+            // Close the form and reload businesses
+            $('#add-business-form').removeClass('active');
+            $('body').css('overflow', 'auto');
+            $('#business-form')[0].reset();
+            $('.form-error').hide();
+            
+            // Reload the businesses list
+            loadBusinesses();
+
+        } catch (err) {
+            console.error(err);
+            alert(err.message || 'Failed to create business. Try again.');
+        }
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizManager Pro - Finance Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #8378f0;
+            --primary-dark: #5649c9;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nav-title {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background: var(--gray-100);
+            transition: var(--transition);
+        }
+
+        .user-card:hover {
+            background: var(--gray-200);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            margin-left: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .user-info {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        .main-content.expanded {
+            margin-left: var(--sidebar-collapsed);
+        }
+
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--gray-100);
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .page-title p {
+            color: var(--gray-600);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--gray-300);
+            background: var(--gray-100);
+            transition: var(--transition);
+            width: 280px;
+        }
+
+        .search-box input:focus {
+            width: 320px;
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border: none;
+            color: var(--gray-600);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-200);
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-dropdown {
+            margin-left: 0.5rem;
+        }
+
+        .user-dropdown-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            padding: 0.25rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .user-dropdown-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .user-dropdown-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.primary {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.warning {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.danger {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-desc {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            color: var(--gray-500);
+            font-size: 0.75rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            background: var(--gray-100);
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .action-card:hover .action-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-desc {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-600);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            color: var(--gray-500);
+        }
+
+        .empty-state h5 {
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .welcome-message h1 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-message p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        /* Floating Form Styles */
+        .floating-form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .floating-form-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .floating-form {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .floating-form-container.visible .floating-form {
+            transform: translateY(0);
+        }
+
+        .form-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .form-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .form-close:hover {
+            color: var(--danger);
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-item {
+            list-style: none;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-300);
+            background: white;
+            color: var(--gray-700);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .page-link:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        .page-item.active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .page-item.disabled .page-link {
+            background: var(--gray-100);
+            color: var(--gray-500);
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+            
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+            
+            .overlay.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box input {
+                width: 200px;
+            }
+            
+            .search-box input:focus {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        [data-aos] {
+            transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+         <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="logo-text">BizManager Pro</div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <div class="nav-item">
+                    <a href="/pages/dashboard.html" class="nav-link ">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/inventory.html" class="nav-link">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/orders.html" class="nav-link">
+                        <i class="bi bi-cart"></i>
+                        <span class="nav-text">Orders</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Management</div>
+                <div class="nav-item">
+                    <a href="/pages/finance.html" class="nav-link active">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="nav-text">Finance</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/customers.html" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-text">Customers</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/financeReport.html" class="nav-link">
+                        <i class="bi bi-file-text"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Preferences</div>
+                <div class="nav-item">
+                    <a href="/pages/settings.html" class="nav-link">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="nav-text">Help & Support</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="nav-text">Help & Support</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-info">
+                        <div class="user-name" id="businessName">John Smith</div>
+                        <div class="user-role" id="businessRole">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1 id="welcomeUser">Finance Management</h1>
+                        <p>Monitor your business finances and track financial performance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Welcome Message -->
+                <div class="welcome-message fade-in" data-aos="fade-up">
+                    <h1>Financial Overview</h1>
+                    <p>Monitor your business finances and track financial performance</p>
+                    <button class="btn btn-light">View Financial Reports</button>
+                </div>
+
+                <!-- Financial Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card fade-in" data-aos="fade-up">
+                        <div class="stat-header">
+                            <div class="stat-icon primary">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="stat-trend trend-down">
+                                <i class="bi bi-arrow-down-short"></i> 0%
+                            </div>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-1" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-header">
+                            <div class="stat-icon danger">
+                                <i class="bi bi-graph-down"></i>
+                            </div>
+                            <div class="stat-trend trend-down">
+                                <i class="bi bi-arrow-down-short"></i> 0%
+                            </div>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                        <div class="stat-label">Total Expenses</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-2" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-header">
+                            <div class="stat-icon success">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div class="stat-trend trend-down">
+                                <i class="bi bi-dash"></i> 0%
+                            </div>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                        <div class="stat-label">Net Profit</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+                            <div class="stat-trend trend-down">
+                                <i class="bi bi-dash"></i> 0%
+                            </div>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                        <div class="stat-label">Outstanding Loans</div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <div class="chart-card" data-aos="fade-up">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Financial Overview</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-sm btn-outline-primary">View Report</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="empty-state">
+                                <i class="bi bi-bar-chart"></i>
+                                <h5>No Financial Data Yet</h5>
+                                <p>Start recording transactions to see financial charts</p>
+                                <button class="btn btn-primary">Record First Transaction</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Expense Breakdown</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-sm btn-outline-secondary">See All</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="empty-state">
+                                <i class="bi bi-pie-chart"></i>
+                                <h5>No Expense Data</h5>
+                                <p>Add expenses to see breakdown by category</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Tracking -->
+                <div class="chart-card" data-aos="fade-up">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Expense Tracking</h3>
+                        <div class="chart-actions">
+                            <button class="btn btn-sm btn-outline-secondary">View All</button>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <i class="bi bi-receipt"></i>
+                        <h5>No Expenses Recorded</h5>
+                        <p>Track your business expenses to monitor cash flow</p>
+                        <button class="btn btn-primary">Add First Expense</button>
+                    </div>
+                </div>
+
+                <!-- Loan Management -->
+                <div class="chart-card" data-aos="fade-up">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Loan Management</h3>
+                        <div class="chart-actions">
+                            <button class="btn btn-sm btn-outline-secondary">View All</button>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <i class="bi bi-credit-card"></i>
+                        <h5>No Active Loans</h5>
+                        <p>Manage business loans and track repayment schedules</p>
+                        <button class="btn btn-primary">Add Loan Information</button>
+                    </div>
+                </div>
+
+                <!-- Financial Reports -->
+                <div class="chart-card" data-aos="fade-up">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Financial Reports</h3>
+                        <div class="chart-actions">
+                            <button class="btn btn-sm btn-outline-secondary">View All</button>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <h5>No Reports Generated</h5>
+                        <p>Generate financial reports to analyze business performance</p>
+                        <button class="btn btn-primary">Generate First Report</button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <h3 class="mb-3" data-aos="fade-up">Quick Actions</h3>
+                <div class="quick-actions mb-4">
+                    <div class="action-card" data-aos="fade-up" data-aos-delay="100" id="addExpenseBtn">
+                        <div class="action-icon">
+                            <i class="bi bi-plus-circle"></i>
+                        </div>
+                        <h4 class="action-title">Add Expense</h4>
+                        <p class="action-desc">Track your business expenses</p>
+                    </div>
+
+                    <div class="action-card" data-aos="fade-up" data-aos-delay="200" id="recordIncomeBtn">
+                        <div class="action-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                        <h4 class="action-title">Record Income</h4>
+                        <p class="action-desc">Record business revenue</p>
+                    </div>
+
+                    <div class="action-card" data-aos="fade-up" data-aos-delay="300" id="generateReportBtn">
+                        <div class="action-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h4 class="action-title">Generate Report</h4>
+                        <p class="action-desc">Create financial reports</p>
+                    </div>
+
+                    <div class="action-card" data-aos="fade-up" data-aos-delay="400" id="manageLoansBtn">
+                        <div class="action-icon">
+                            <i class="bi bi-credit-card"></i>
+                        </div>
+                        <h4 class="action-title">Manage Loans</h4>
+                        <p class="action-desc">Track business loans</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Floating Form for Adding Expense -->
+      <div class="floating-form-container" id="expenseForm">
+          <div class="floating-form">
+              <div class="form-header">
+                  <h3>Add New Expense</h3>
+                  <button class="form-close" id="closeExpenseForm">
+                      <i class="bi bi-x-lg"></i>
+                  </button>
+              </div>
+              <div class="form-body">
+                  <div class="mb-3">
+                      <label for="expenseName" class="form-label">Expense Name</label>
+                      <input type="text" class="form-control" id="expenseName" placeholder="Enter expense name">
+                  </div>
+                  <div class="mb-3">
+                      <label for="expenseAmount" class="form-label">Amount</label>
+                      <input type="number" class="form-control" id="expenseAmount" placeholder="Enter amount">
+                  </div>
+                  <div class="mb-3">
+                      <label for="expenseCategory" class="form-label">Category</label>
+                      <select class="form-select" id="expenseCategory">
+                          <option selected>Select category</option>
+                          <option value="supplies">Office Supplies</option>
+                          <option value="utilities">Utilities</option>
+                          <option value="salaries">Salaries</option>
+                          <option value="marketing">Marketing</option>
+                          <option value="other">Other</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="expenseDate" class="form-label">Date</label>
+                      <input type="date" class="form-control" id="expenseDate">
+                  </div>
+                  <div class="mb-3">
+                      <label for="expenseNotes" class="form-label">Notes</label>
+                      <textarea class="form-control" id="expenseNotes" rows="3" placeholder="Add any notes about this expense"></textarea>
+                  </div>
+              </div>
+              <div class="form-footer">
+                  <button type="button" class="btn btn-secondary" id="cancelExpenseBtn">Cancel</button>
+                  <button type="button" class="btn btn-primary" id="saveExpenseBtn">Save Expense</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- Pagination Component -->
+      <div class="pagination-container">
+          <ul class="pagination">
+              <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                      <i class="bi bi-chevron-left"></i>
+                  </a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                  <a class="page-link" href="#">
+                      <i class="bi bi-chevron-right"></i>
+                  </a>
+              </li>
+          </ul>
+      </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        $(document).ready(function() {
+            // Set user data from localStorage
+            const user = JSON.parse(localStorage.getItem('user') || '{"username":"John","role":"Administrator"}');
+            $('#welcomeUser').text('Finance Management');
+            $('#businessName').text(user.username);
+            $('#businessRole').text(user.role);
+
+            // Toggle sidebar
+            const sidebar = $('#sidebar');
+            const mainContent = $('#mainContent');
+            const overlay = $('#overlay');
+            const sidebarToggle = $('#sidebarToggle');
+
+            sidebarToggle.on('click', function() {
+                if ($(window).width() < 992) {
+                    sidebar.toggleClass('mobile-visible');
+                    overlay.toggleClass('visible');
+                } else {
+                    sidebar.toggleClass('collapsed');
+                    mainContent.toggleClass('expanded');
+                }
+            });
+
+            // Close sidebar when clicking on overlay (mobile)
+            overlay.on('click', function() {
+                sidebar.removeClass('mobile-visible');
+                overlay.removeClass('visible');
+            });
+
+            // Add hover effects to cards
+            $('.stat-card, .action-card').hover(
+                function() {
+                    const isStatCard = $(this).hasClass('stat-card');
+                    $(this).css('transform', isStatCard ? 'translateY(-5px)' : 'translateY(-3px)');
+                },
+                function() {
+                    $(this).css('transform', 'translateY(0)');
+                }
+            );
+
+            // Form handling
+            $('#addExpenseBtn').on('click', function() {
+                openForm('expenseForm');
+            });
+            
+            $('#closeExpenseForm, #cancelExpenseBtn').on('click', function() {
+                closeForm('expenseForm');
+            });
+            
+            $('#saveExpenseBtn').on('click', saveExpense);
+            
+            // Quick action buttons
+            $('#recordIncomeBtn').on('click', recordIncome);
+            $('#generateReportBtn').on('click', generateReport);
+            $('#manageLoansBtn').on('click', manageLoans);
+            
+            // Setup pagination
+            setupPagination();
+        });
+
+        // Form handling functions
+        function openForm(formId) {
+            $('#' + formId).addClass('visible');
+            $('body').css('overflow', 'hidden');
+        }
+
+        function closeForm(formId) {
+            $('#' + formId).removeClass('visible');
+            $('body').css('overflow', 'auto');
+        }
+
+        function saveExpense() {
+            // Get form values
+            const name = $('#expenseName').val();
+            const amount = $('#expenseAmount').val();
+            const category = $('#expenseCategory').val();
+            const date = $('#expenseDate').val();
+            const notes = $('#expenseNotes').val();
+            
+            // Validate and save data
+            if (name && amount && category && date) {
+                console.log('Saving expense:', { name, amount, category, date, notes });
+                alert('Expense saved successfully!');
+                closeForm('expenseForm');
+                
+                // Reset form
+                $('#expenseForm form')[0].reset();
+            } else {
+                alert('Please fill in all required fields');
+            }
+        }
+
+        // Quick action functions
+        function recordIncome() {
+            alert('Record income functionality would open here');
+        }
+
+        function generateReport() {
+            alert('Generate report functionality would open here');
+        }
+
+        function manageLoans() {
+            alert('Manage loans functionality would open here');
+        }
+
+        // Pagination functionality
+        function setupPagination() {
+            // You would implement your pagination logic here
+            const itemsPerPage = 10;
+            const totalItems = 0; // This would come from your data
+            
+            $('.page-link').on('click', function(e) {
+                e.preventDefault();
+                // Handle pagination navigation
+                const page = parseInt($(this).text());
+                if (!isNaN(page)) {
+                    loadPage(page);
+                } else if ($(this).find('.bi-chevron-left').length) {
+                    // Previous page
+                } else if ($(this).find('.bi-chevron-right').length) {
+                    // Next page
+                }
+            });
+        }
+
+        function loadPage(pageNumber) {
+            // Implement your page loading logic here
+            console.log('Loading page:', pageNumber);
+        }
+    </script>
+</body>
+</html>

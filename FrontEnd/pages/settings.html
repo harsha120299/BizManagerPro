@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizManager Pro - Settings</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #8378f0;
+            --primary-dark: #5649c9;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Same as dashboard */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nav-title {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background: var(--gray-100);
+            transition: var(--transition);
+        }
+
+        .user-card:hover {
+            background: var(--gray-200);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            margin-left: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .user-info {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        .main-content.expanded {
+            margin-left: var(--sidebar-collapsed);
+        }
+
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--gray-100);
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .page-title p {
+            color: var(--gray-600);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            padding: 1.5rem;
+        }
+
+        /* Settings Navigation */
+        .settings-nav-container {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .settings-nav {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .settings-nav .nav-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .settings-nav .nav-link {
+            color: var(--gray-600);
+            padding: 1rem 1.5rem;
+            text-align: center;
+            border-radius: 0;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .settings-nav .nav-link:hover {
+            background-color: rgba(108, 92, 231, 0.05);
+            color: var(--primary);
+        }
+
+        .settings-nav .nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .settings-nav .nav-link i {
+            display: block;
+            margin: 0 auto 0.5rem;
+            font-size: 1.25rem;
+            width: auto;
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.15);
+        }
+
+        /* Avatar Upload */
+        .avatar-upload {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid var(--gray-200);
+            box-shadow: var(--card-shadow);
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Switch Toggle */
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.15);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Integration Cards */
+        .integration-card {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .integration-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.1);
+        }
+
+        .integration-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Save Button Fixed */
+        .save-button-container {
+            position: sticky;
+            top: 70px;
+            z-index: 99;
+            padding: 1rem 0;
+            background: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+            
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+            
+            .overlay.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .settings-nav .nav-item {
+                min-width: 100px;
+            }
+
+            .settings-nav .nav-link {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .settings-nav .nav-link i {
+                margin: 0 auto 0.25rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .settings-content {
+                padding: 1rem;
+            }
+
+            .settings-nav {
+                flex-direction: column;
+            }
+
+            .settings-nav .nav-item {
+                min-width: auto;
+            }
+
+            .settings-nav .nav-link {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 1rem;
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+
+            .settings-nav .nav-link.active {
+                border-left-color: var(--primary);
+                border-bottom-color: transparent;
+            }
+
+            .settings-nav .nav-link i {
+                margin: 0 0.75rem 0 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="logo-text">BizManager Pro</div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <div class="nav-item">
+                    <a href="/pages/dashboard.html" class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/inventory.html" class="nav-link">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/orders.html" class="nav-link">
+                        <i class="bi bi-cart"></i>
+                        <span class="nav-text">Orders</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Management</div>
+                <div class="nav-item">
+                    <a href="/pages/finance.html" class="nav-link">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="nav-text">Finance</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/customers.html" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-text">Customers</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/financeReport.html" class="nav-link">
+                        <i class="bi bi-file-text"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Preferences</div>
+                <div class="nav-item">
+                    <a href="/pages/settings.html" class="nav-link active">
+                        <i class="bi bi-gear"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="nav-text">Help & Support</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-card" id="userCard">
+                    <img src="https://via.placeholder.com/40" class="user-avatar" alt="User">
+                    <div class="user-info">
+                        <div class="user-name" id="businessName">John Smith</div>
+                        <div class="user-role" id="businessRole">Administrator</div>
+                    </div>
+                    <button id="logoutBtn" style="
+                        margin-left:auto; 
+                        background: none; 
+                        border:none; 
+                        color: var(--danger);
+                        cursor:pointer;
+                        font-size:1rem;
+                    ">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1>Settings</h1>
+                        <p>Manage your account and business preferences</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary" id="saveAllBtn">
+                        <i class="bi bi-check-lg me-2"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Settings Navigation -->
+                <div class="settings-nav-container" data-aos="fade-up">
+                    <ul class="nav settings-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#profile" data-bs-toggle="tab">
+                                <i class="bi bi-person"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#security" data-bs-toggle="tab">
+                                <i class="bi bi-shield-lock"></i>
+                                <span>Security</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#business" data-bs-toggle="tab">
+                                <i class="bi bi-building"></i>
+                                <span>Business</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#preferences" data-bs-toggle="tab">
+                                <i class="bi bi-sliders"></i>
+                                <span>Preferences</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#notifications" data-bs-toggle="tab">
+                                <i class="bi bi-bell"></i>
+                                <span>Notifications</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="tab-content">
+                    <!-- Profile Tab -->
+                    <div class="tab-pane fade show active" id="profile">
+                        <div class="card fade-in" data-aos="fade-up">
+                            <div class="card-header">
+                                <h5 class="mb-0">Profile Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center mb-4">
+                                        <div class="avatar-upload">
+                                            <img src="https://via.placeholder.com/120" class="profile-avatar rounded-circle mb-3" alt="Profile" id="profile-preview">
+                                            <input type="file" id="profile-upload" class="d-none" accept="image/*">
+                                            <label for="profile-upload" class="avatar-edit">
+                                                <i class="bi bi-camera-fill"></i>
+                                            </label>
+                                        </div>
+                                        <button class="btn btn-outline-primary btn-sm">Change Photo</button>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="firstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="lastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" placeholder="Enter email address">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="phone" class="form-label">Phone</label>
+                                                <input type="tel" class="form-control" id="phone" placeholder="Enter phone number">
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="bio" class="form-label">Bio</label>
+                                                <textarea class="form-control" id="bio" rows="3" placeholder="Tell us about yourself"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="tab-pane fade" id="security">
+                        <div class="card mb-4 fade-in" data-aos="fade-up">
+                            <div class="card-header">
+                                <h5 class="mb-0">Change Password</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="currentPassword" class="form-label">Current Password</label>
+                                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                        <div class="form-text">Minimum 8 characters with at least one number and one special character</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary">Update Password</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card fade-in" data-aos="fade-up" data-aos-delay="100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Two-Factor Authentication</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div>
+                                        <h6 class="mb-1">SMS Authentication</h6>
+                                        <p class="text-muted mb-0 small">Receive verification codes via SMS</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="smsAuth">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div>
+                                        <h6 class="mb-1">Authenticator App</h6>
+                                        <p class="text-muted mb-0 small">Use an app like Google Authenticator</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="appAuth">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Info Tab -->
+                    <div class="tab-pane fade" id="business">
+                        <div class="card fade-in" data-aos="fade-up">
+                            <div class="card-header">
+                                <h5 class="mb-0">Business Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="businessName" class="form-label">Business Name</label>
+                                        <input type="text" class="form-control" id="businessName" placeholder="Enter business name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="businessType" class="form-label">Business Type</label>
+                                        <select class="form-select" id="businessType">
+                                            <option value="" disabled selected>Select business type</option>
+                                            <option>Retail</option>
+                                            <option>Wholesale</option>
+                                            <option>Service</option>
+                                            <option>Manufacturing</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="businessAddress" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="businessAddress" placeholder="Enter business address">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="businessCity" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="businessCity" placeholder="Enter city">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="businessState" class="form-label">State</label>
+                                        <input type="text" class="form-control" id="businessState" placeholder="Enter state">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="businessZip" class="form-label">ZIP Code</label>
+                                        <input type="text" class="form-control" id="businessZip" placeholder="Enter ZIP code">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="businessPhone" class="form-label">Business Phone</label>
+                                        <input type="tel" class="form-control" id="businessPhone" placeholder="Enter business phone">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="businessEmail" class="form-label">Business Email</label>
+                                        <input type="email" class="form-control" id="businessEmail" placeholder="Enter business email">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="businessTaxId" class="form-label">Tax ID</label>
+                                        <input type="text" class="form-control" id="businessTaxId" placeholder="Enter tax ID">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Tab -->
+                    <div class="tab-pane fade" id="preferences">
+                        <div class="card mb-4 fade-in" data-aos="fade-up">
+                            <div class="card-header">
+                                <h5 class="mb-0">General Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="timezone" class="form-label">Timezone</label>
+                                        <select class="form-select" id="timezone">
+                                            <option value="" disabled selected>Select timezone</option>
+                                            <option>(GMT+05:30) Sri Lanka Time</option>
+                                            <option>(GMT-12:00) International Date Line West</option>
+                                            <option>(GMT-11:00) Midway Island, Samoa</option>
+                                            <option>(GMT-05:00) Eastern Time (US & Canada)</option>
+                                            <option>(GMT-04:00) Atlantic Time (Canada)</option>
+                                            <option>(GMT+00:00) Greenwich Mean Time</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="dateFormat" class="form-label">Date Format</label>
+                                        <select class="form-select" id="dateFormat">
+                                            <option value="" disabled selected>Select date format</option>
+                                            <option>DD/MM/YYYY</option>
+                                            <option>MM/DD/YYYY</option>
+                                            <option>YYYY-MM-DD</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="language" class="form-label">Language</label>
+                                        <select class="form-select" id="language">
+                                            <option value="" disabled selected>Select language</option>
+                                            <option>English</option>
+                                            <option>Sinhala</option>
+                                            <option>Tamil</option>
+                                            <option>Spanish</option>
+                                            <option>French</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="currency" class="form-label">Currency</label>
+                                        <select class="form-select" id="currency">
+                                            <option value="" disabled selected>Select currency</option>
+                                            <option>Sri Lankan Rupee (LKR)</option>
+                                            <option>US Dollar (USD)</option>
+                                            <option>Euro (EUR)</option>
+                                            <option>British Pound (GBP)</option>
+                                            <option>Japanese Yen (JPY)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card fade-in" data-aos="fade-up" data-aos-delay="100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Dashboard Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="defaultView" class="form-label">Default Dashboard View</label>
+                                    <select class="form-select" id="defaultView">
+                                        <option value="" disabled selected>Select default view</option>
+                                        <option>Business Overview</option>
+                                        <option>Sales Dashboard</option>
+                                        <option>Inventory Summary</option>
+                                        <option>Financial Summary</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <label class="form-label mb-0">Show Quick Stats</label>
+                                            <small class="text-muted d-block">Display key metrics on dashboard</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="quickStats" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <label class="form-label mb-0">Show Recent Activity</label>
+                                            <small class="text-muted d-block">Display recent business activities</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="recentActivity" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <label class="form-label mb-0">Show Performance Charts</label>
+                                            <small class="text-muted d-block">Display revenue and analytics charts</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="performanceCharts" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div class="tab-pane fade" id="notifications">
+                        <div class="card mb-4 fade-in" data-aos="fade-up">
+                            <div class="card-header">
+                                <h5 class="mb-0">Email Notifications</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="orderEmails" checked>
+                                        <label class="form-check-label fw-medium" for="orderEmails">New orders</label>
+                                        <div class="form-text">Get notified when new orders are placed</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="paymentEmails" checked>
+                                        <label class="form-check-label fw-medium" for="paymentEmails">Payments received</label>
+                                        <div class="form-text">Get notified when payments are processed</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="inventoryEmails" checked>
+                                        <label class="form-check-label fw-medium" for="inventoryEmails">Low inventory alerts</label>
+                                        <div class="form-text">Get notified when stock levels are low</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="reportEmails">
+                                        <label class="form-check-label fw-medium" for="reportEmails">Weekly reports</label>
+                                        <div class="form-text">Receive weekly business performance summaries</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card fade-in" data-aos="fade-up" data-aos-delay="100">
+                            <div class="card-header">
+                                <h5 class="mb-0">In-App Notifications</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="orderAlerts" checked>
+                                        <label class="form-check-label fw-medium" for="orderAlerts">New orders</label>
+                                        <div class="form-text">Show pop-up notifications for new orders</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="paymentAlerts" checked>
+                                        <label class="form-check-label fw-medium" for="paymentAlerts">Payments received</label>
+                                        <div class="form-text">Show notifications when payments are received</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="inventoryAlerts" checked>
+                                        <label class="form-check-label fw-medium" for="inventoryAlerts">Low inventory alerts</label>
+                                        <div class="form-text">Show alerts when inventory is running low</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 p-3 rounded" style="background-color: var(--gray-100);">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="systemAlerts">
+                                        <label class="form-check-label fw-medium" for="systemAlerts">System updates</label>
+                                        <div class="form-text">Notify about system maintenance and updates</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrations Tab -->
+                   
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script type="module">
+        import { logout } from '/js/auth.js';
+        
+        $(document).ready(function() {
+            // Initialize AOS animations
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+
+            // Set user data from localStorage
+            const user = JSON.parse(localStorage.getItem('user') || '{"username":"John","role":"Administrator"}');
+            $('#businessName').text(user.username);
+            $('#businessRole').text(user.role);
+
+            // Toggle sidebar
+            const $sidebar = $('#sidebar');
+            const $mainContent = $('#mainContent');
+            const $overlay = $('#overlay');
+            const $sidebarToggle = $('#sidebarToggle');
+
+            $sidebarToggle.on('click', function() {
+                if ($(window).width() < 992) {
+                    $sidebar.toggleClass('mobile-visible');
+                    $overlay.toggleClass('visible');
+                } else {
+                    $sidebar.toggleClass('collapsed');
+                    $mainContent.toggleClass('expanded');
+                }
+            });
+
+            // Close sidebar when clicking on overlay (mobile)
+            $overlay.on('click', function() {
+                $sidebar.removeClass('mobile-visible');
+                $overlay.removeClass('visible');
+            });
+
+            // Logout functionality
+            $('#logoutBtn').on('click', async function() {
+                if (typeof logout === 'function') {
+                    await logout();
+                } else {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('user');
+                    window.location.href = '/index.html';
+                }
+            });
+
+            // Profile picture upload preview
+            $('#profile-upload').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#profile-preview').attr('src', event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Add animation class when tab is shown
+            $('[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+                const targetPane = $(e.target.getAttribute('href'));
+                const cards = targetPane.find('.card');
+                cards.each(function(index) {
+                    const $card = $(this);
+                    $card.css('animation-delay', (index * 0.1) + 's');
+                    $card.removeClass('fade-in');
+                    // Force reflow
+                    this.offsetHeight;
+                    $card.addClass('fade-in');
+                });
+            });
+
+            // Save all settings
+            $('#saveAllBtn').on('click', function() {
+                // Collect all form data
+                const settings = {
+                    profile: {
+                        firstName: $('#firstName').val(),
+                        lastName: $('#lastName').val(),
+                        email: $('#email').val(),
+                        phone: $('#phone').val(),
+                        bio: $('#bio').val()
+                    },
+                    business: {
+                        businessName: $('#businessName').val(),
+                        businessType: $('#businessType').val(),
+                        businessAddress: $('#businessAddress').val(),
+                        businessCity: $('#businessCity').val(),
+                        businessState: $('#businessState').val(),
+                        businessZip: $('#businessZip').val(),
+                        businessPhone: $('#businessPhone').val(),
+                        businessEmail: $('#businessEmail').val(),
+                        businessTaxId: $('#businessTaxId').val()
+                    },
+                    preferences: {
+                        timezone: $('#timezone').val(),
+                        dateFormat: $('#dateFormat').val(),
+                        language: $('#language').val(),
+                        currency: $('#currency').val(),
+                        defaultView: $('#defaultView').val(),
+                        quickStats: $('#quickStats').is(':checked'),
+                        recentActivity: $('#recentActivity').is(':checked'),
+                        performanceCharts: $('#performanceCharts').is(':checked')
+                    },
+                    notifications: {
+                        orderEmails: $('#orderEmails').is(':checked'),
+                        paymentEmails: $('#paymentEmails').is(':checked'),
+                        inventoryEmails: $('#inventoryEmails').is(':checked'),
+                        reportEmails: $('#reportEmails').is(':checked'),
+                        orderAlerts: $('#orderAlerts').is(':checked'),
+                        paymentAlerts: $('#paymentAlerts').is(':checked'),
+                        inventoryAlerts: $('#inventoryAlerts').is(':checked'),
+                        systemAlerts: $('#systemAlerts').is(':checked')
+                    },
+                    security: {
+                        smsAuth: $('#smsAuth').is(':checked'),
+                        appAuth: $('#appAuth').is(':checked')
+                    }
+                };
+
+                // Save to localStorage (in a real app, this would be sent to server)
+                localStorage.setItem('userSettings', JSON.stringify(settings));
+                
+                // Show success message
+                const $btn = $(this);
+                const originalText = $btn.html();
+                $btn.html('<i class="bi bi-check-lg me-2"></i>Saved!').removeClass('btn-primary').addClass('btn-success');
+                
+                setTimeout(function() {
+                    $btn.html(originalText).removeClass('btn-success').addClass('btn-primary');
+                }, 2000);
+            });
+
+            // Load saved settings if they exist
+            const savedSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            if (Object.keys(savedSettings).length > 0) {
+                // Load profile settings
+                if (savedSettings.profile) {
+                    $('#firstName').val(savedSettings.profile.firstName || '');
+                    $('#lastName').val(savedSettings.profile.lastName || '');
+                    $('#email').val(savedSettings.profile.email || '');
+                    $('#phone').val(savedSettings.profile.phone || '');
+                    $('#bio').val(savedSettings.profile.bio || '');
+                }
+
+                // Load business settings
+                if (savedSettings.business) {
+                    $('#businessName').val(savedSettings.business.businessName || '');
+                    $('#businessType').val(savedSettings.business.businessType || '');
+                    $('#businessAddress').val(savedSettings.business.businessAddress || '');
+                    $('#businessCity').val(savedSettings.business.businessCity || '');
+                    $('#businessState').val(savedSettings.business.businessState || '');
+                    $('#businessZip').val(savedSettings.business.businessZip || '');
+                    $('#businessPhone').val(savedSettings.business.businessPhone || '');
+                    $('#businessEmail').val(savedSettings.business.businessEmail || '');
+                    $('#businessTaxId').val(savedSettings.business.businessTaxId || '');
+                }
+
+                // Load preference settings
+                if (savedSettings.preferences) {
+                    $('#timezone').val(savedSettings.preferences.timezone || '');
+                    $('#dateFormat').val(savedSettings.preferences.dateFormat || '');
+                    $('#language').val(savedSettings.preferences.language || '');
+                    $('#currency').val(savedSettings.preferences.currency || '');
+                    $('#defaultView').val(savedSettings.preferences.defaultView || '');
+                    $('#quickStats').prop('checked', savedSettings.preferences.quickStats !== false);
+                    $('#recentActivity').prop('checked', savedSettings.preferences.recentActivity !== false);
+                    $('#performanceCharts').prop('checked', savedSettings.preferences.performanceCharts !== false);
+                }
+
+                // Load notification settings
+                if (savedSettings.notifications) {
+                    $('#orderEmails').prop('checked', savedSettings.notifications.orderEmails !== false);
+                    $('#paymentEmails').prop('checked', savedSettings.notifications.paymentEmails !== false);
+                    $('#inventoryEmails').prop('checked', savedSettings.notifications.inventoryEmails !== false);
+                    $('#reportEmails').prop('checked', savedSettings.notifications.reportEmails || false);
+                    $('#orderAlerts').prop('checked', savedSettings.notifications.orderAlerts !== false);
+                    $('#paymentAlerts').prop('checked', savedSettings.notifications.paymentAlerts !== false);
+                    $('#inventoryAlerts').prop('checked', savedSettings.notifications.inventoryAlerts !== false);
+                    $('#systemAlerts').prop('checked', savedSettings.notifications.systemAlerts || false);
+                }
+
+                // Load security settings
+                if (savedSettings.security) {
+                    $('#smsAuth').prop('checked', savedSettings.security.smsAuth || false);
+                    $('#appAuth').prop('checked', savedSettings.security.appAuth || false);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

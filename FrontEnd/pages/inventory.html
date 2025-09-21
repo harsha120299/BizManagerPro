@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizManager Pro - Inventory Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #8378f0;
+            --primary-dark: #5649c9;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nav-title {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            background: var(--gray-100);
+            transition: var(--transition);
+        }
+
+        .user-card:hover {
+            background: var(--gray-200);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            margin-left: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .user-info {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .remove-item {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        .main-content.expanded {
+            margin-left: var(--sidebar-collapsed);
+        }
+
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--gray-100);
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .page-title p {
+            color: var(--gray-600);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--gray-300);
+            background: var(--gray-100);
+            transition: var(--transition);
+            width: 280px;
+        }
+
+        .search-box input:focus {
+            width: 320px;
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .add-material {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border: none;
+            color: var(--gray-600);
+            transition: var(--transition);
+            position: relative;
+        }
+        .order-items {
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            padding: 1rem;
+            background: var(--gray-50);
+        }
+        .action-btn:hover {
+            background: var(--gray-200);
+            color: var(--primary);
+        }
+        .item-row {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+            margin-bottom: 1rem;
+        }
+
+        .item-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-dropdown {
+            margin-left: 0.5rem;
+        }
+
+        .user-dropdown-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            padding: 0.25rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .user-dropdown-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .user-dropdown-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.primary {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.warning {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.danger {
+            background: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* Tab System */
+        .tab-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .tab-header {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0;
+        }
+
+        .tab-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab-nav-item {
+            flex: 1;
+        }
+
+        .tab-nav-link {
+            display: block;
+            padding: 1rem 2rem;
+            text-align: center;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-nav-link:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .tab-nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(108, 92, 231, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+        .tab-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 1rem;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h5 {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .table-responsive {
+            margin: 0;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table th {
+            background: var(--gray-50);
+            border-bottom: 2px solid var(--gray-200);
+            font-weight: 600;
+            color: var(--gray-700);
+            padding: 1rem;
+        }
+
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table tbody tr:hover {
+            background: var(--gray-50);
+            cursor: pointer;
+        }
+
+        /* Floating Forms */
+        .floating-form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .floating-form-container.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .floating-form-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .floating-form {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .floating-form-container.active .floating-form {
+            transform: scale(1);
+        }
+
+        .floating-form-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .floating-form-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .floating-form-close {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            transition: var(--transition);
+        }
+
+        .floating-form-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .floating-form-body {
+            padding: 1.5rem;
+        }
+
+        .floating-form-actions {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+            
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+            
+            .overlay.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .search-box {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-nav {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="logo-text">BizManager Pro</div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <div class="nav-item">
+                    <a href="/pages/dashboard.html" class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/inventory.html" class="nav-link active">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/orders.html" class="nav-link">
+                        <i class="bi bi-cart"></i>
+                        <span class="nav-text">Orders</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Management</div>
+                <div class="nav-item">
+                    <a href="/pages/finance.html" class="nav-link">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="nav-text">Finance</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/pages/customers.html" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-text">Customers</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-text"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Preferences</div>
+                <div class="nav-item">
+                    <a href="/pages/settings.html" class="nav-link">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="nav-text">Help & Support</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="nav-text">Help & Support</span>
+                    </a>
+                </div>
+            </div>
+
+           <div class="sidebar-footer">
+                <div class="user-card" id="userCard">
+                    <div class="user-info">
+                        <div class="user-name" id="businessName">John Smith</div>
+                        <div class="user-role" id="businessRole">Administrator</div>
+                    </div>
+                    <button id="logoutBtn" style="
+                        margin-left:auto; 
+                        background: none; 
+                        border:none; 
+                        color: var(--danger);
+                        cursor:pointer;
+                        font-size:1rem;
+                    ">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1>Inventory Management</h1>
+                        <p>Manage your products, materials, and inventory levels</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card fade-in" data-aos="fade-up">
+                        <div class="stat-header">
+                            <div class="stat-icon primary">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                        <div class="stat-change">No products added yet</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-1" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-header">
+                            <div class="stat-icon success">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalMaterials">0</div>
+                        <div class="stat-label">Total Materials</div>
+                        <div class="stat-change">No materials added yet</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-2" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="lowStockProducts">0</div>
+                        <div class="stat-label">Low Stock Products</div>
+                        <div class="stat-change">All items well stocked</div>
+                    </div>
+                     <div class="stat-card fade-in delay-2" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="lowStockMaterials">0</div>
+                        <div class="stat-label">Low Stock Materials</div>
+                        <div class="stat-change">All items well stocked</div>
+                    </div>
+
+                    <div class="stat-card fade-in delay-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-header">
+                            <div class="stat-icon danger">
+                                <i class="bi bi-x-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="outOfStockProducts">0</div>
+                        <div class="stat-label">Out of Stock</div>
+                        <div class="stat-change">No out of stock Products</div>
+                    </div>
+                    <div class="stat-card fade-in delay-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-header">
+                            <div class="stat-icon danger">
+                                <i class="bi bi-x-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="outOfStockMaterials">0</div>
+                        <div class="stat-label">Out of Stock</div>
+                        <div class="stat-change">No out of stock Materials</div>
+                    </div>
+                </div>
+
+                <!-- Inventory Tabs -->
+                <div class="tab-container" data-aos="fade-up">
+                    <div class="tab-header">
+                        <ul class="tab-nav">
+                            <li class="tab-nav-item">
+                                <a href="#materials-tab" class="tab-nav-link active" data-tab="materials-tab">
+                                    <i class="bi bi-gear me-2"></i>Materials
+                                </a>
+                            </li>
+                            <li class="tab-nav-item">
+                                <a href="#products-tab" class="tab-nav-link" data-tab="products-tab">
+                                    <i class="bi bi-box-seam me-2"></i>Products
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Materials Tab -->
+                    <div id="materials-tab" class="tab-content active">
+                        <!-- Empty State -->
+                        <div id="materials-empty" class="empty-state">
+                            <i class="bi bi-gear"></i>
+                            <h5>No Materials Added Yet</h5>
+                            <p>Get started by adding your first material to track inventory</p>
+                            <button class="btn btn-primary btn-lg" id="addFirstMaterial">
+                                <i class="bi bi-plus-circle me-2"></i>Add First Material
+                            </button>
+                        </div>
+
+                        <!-- Materials Table -->
+                        <div id="materials-table-container" class="d-none">
+                            <div class="table-header d-flex justify-content-between align-items-center mb-2">
+                                <h3 class="table-title">Materials Inventory</h3>
+                                <div class="d-flex gap-2">
+                                    <div class="search-box">
+                                        <i class="bi bi-search search-icon" ></i>
+                                        <input type="text" id="materialSearch" placeholder="Search Material...">
+                                    </div>
+                                    <button class="btn btn-primary" id="addMaterialBtn">
+                                        <i class="bi bi-plus-circle me-2"></i>Add Material
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="materialsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Unit</th>
+                                            <th id="currencyType">Price</th>
+                                            <th>Quantity</th>
+                                            <th>Supplier</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination Controls -->
+                            <div class="pagination-container mt-2">
+                                <nav>
+                                    <ul class="pagination justify-content-center" id="materialsPagination"></ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Products Tab -->
+                    <div id="products-tab" class="tab-content">
+                        <!-- Empty State -->
+                        <div id="products-empty" class="empty-state">
+                            <i class="bi bi-box-seam"></i>
+                            <h5>No Products Added Yet</h5>
+                            <p>Start by adding products that you manufacture or sell</p>
+                            <button class="btn btn-primary btn-lg" id="addFirstProduct">
+                                <i class="bi bi-plus-circle me-2"></i>Add First Product
+                            </button>
+                        </div>
+
+                        <!-- Products Table -->
+                        <div id="products-table-container" class="d-none">
+                            <div class="table-header">
+                                <h3 class="table-title">Products Inventory</h3>
+                                <div class="search-box">
+                                        <i class="bi bi-search search-icon"></i>
+                                        <input type="text" id="productSearch" placeholder="Search Product...">
+                                    </div>
+                                <button class="btn btn-primary" id="addProductBtn">
+                                    <i class="bi bi-plus-circle me-2"></i>Add Product
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="productsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th id="currencyTypeCost">Cost</th>
+                                            <th id="currencyTypeProduct">Price</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container mt-2">
+                                <nav>
+                                    <ul class="pagination justify-content-center" id="productsPagination"></ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Form Modal -->
+    <div class="floating-form-container" id="materialFormContainer">
+        <div class="floating-form-overlay" id="materialFormOverlay"></div>
+        <div class="floating-form">
+            <div class="floating-form-header">
+                <h3 class="floating-form-title">Add New Material</h3>
+                <button class="floating-form-close" id="closeMaterialForm">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <form id="addMaterialForm">
+                <div class="floating-form-body">
+                    <input type="hidden" id="materialId">
+                    
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="materialName" class="form-label">Material Name</label>
+                            <input type="text" class="form-control" id="materialName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="materialQuantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="materialQuantity" min="0" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="materialUnit" class="form-label">Unit</label>
+                            <select class="form-select" id="materialUnit" required>
+                                <option value="" selected disabled>Select unit</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="g">Grams</option>
+                                <option value="m">Meters</option>
+                                <option value="cm">Centimeters</option>
+                                <option value="l">Liters</option>
+                                <option value="ml">Milliliters</option>
+                                <option value="pcs">Pieces</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="materialCost" class="form-label">Cost (per unit)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="currencyType"></span>
+                                <input type="number" class="form-control" id="materialCost" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="materialSupplier" class="form-label">Supplier Information</label>
+                        <input type="text" class="form-control" id="materialSupplier">
+                    </div>
+
+                </div>
+                
+                <div class="floating-form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelMaterialForm">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="materialAddBtn">Add Material</button>
+                    <button type="button" class="btn btn-success d-none" id="editMaterialBtn">Update Material</button>
+                    <button type="button" class="btn btn-danger d-none" id="deleteMaterialBtn">Delete Material</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Form Modal -->
+    <div class="floating-form-container" id="productFormContainer">
+        <div class="floating-form-overlay" id="productFormOverlay"></div>
+        <div class="floating-form">
+            <div class="floating-form-header">
+                <h3 class="floating-form-title">Add New Product</h3>
+                <button class="floating-form-close" id="closeProductForm">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <form id="addProductForm">
+                <div class="floating-form-body">
+                    <input type="hidden" id="productId">
+                    
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="productQuantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="productQuantity" min="0" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="productUnit" class="form-label">Unit</label>
+                            <select class="form-select" id="productUnit" required>
+                                <option value="" selected disabled>Select unit</option>
+                                <option value="pcs">Pieces</option>
+                                <option value="box">Boxes</option>
+                                <option value="set">Sets</option>
+                                <option value="pair">Pairs</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="productPrice" class="form-label">Price (per unit)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="currencyType"></span>
+                                <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Materials</label>
+                            <div class="order-items">
+                                <div class="item-row">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label">Material</label>
+                                        <select class="form-select">
+                                            <option selected>Select a material</option>
+                                            <option value="1">Material A - $49.99</option>
+                                            <option value="2">Material B - $89.99</option>
+                                            <option value="3">Material C - $24.99</option>
+                                            <option value="4">Material D - $129.99</option>
+                                        </select>
+                                    </div>
+                                   <div style="width: 100px;">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control material-qty" min="0.00001" step="0.00001">
+                        </div>
+                        <button type="button" class="remove-item">
+                            <i class="bi bi-x"></i>
+                        </button>
+
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                        <!-- <label for="productMaterials" class="form-label">Materials</label> -->
+                        <button type="button" class="add-material">
+                                <i class="bi bi-plus"></i> Add Materials
+                            </button>
+                        </div>
+                    </div>
+
+                        <!-- Add Material button -->
+                        <button type="button" class="btn btn-sm btn-outline-primary d-none" id="addMaterialBtn">
+                            <i class="bi bi-plus-circle"></i> Add Material
+                        </button>
+                    </div>
+                </div>
+                <div class="floating-form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelProductForm">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="productAddBtn">Add Product</button>
+                    <button type="button" class="btn btn-success d-none" id="editProductBtn">Update Product</button>
+                    <button type="button" class="btn btn-danger d-none" id="deleteProductBtn">Delete Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module">
+        import { apiFetch } from '/js/auth.js';
+        import { logout } from '/js/auth.js';
+
+
+        $(document).ready(function () {
+            // === GLOBAL INIT ===
+            AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+
+            // Sidebar + Tabs
+            initSidebar();
+            initTabs();
+
+            // Materials
+            initMaterialEvents();
+            loadMaterials();
+
+            // Products
+            initProductEvents();
+            loadProducts();
+
+            // Stats Simulation
+            setTimeout(updateStats, 500);
+
+        });
+    
+
+
+
+        // ======================
+        // MATERIALS MODULE
+        // ======================
+        function initMaterialEvents() {
+            $('#addFirstMaterial, #addMaterialBtn').on('click', () => openMaterialModal());
+            $('#closeMaterialForm, #cancelMaterialForm, #materialFormOverlay').on('click', closeMaterialModal);
+
+            $('#addMaterialForm').on('submit', function (e) {
+                e.preventDefault();
+                const formData = {
+                    name: $('#materialName').val(),
+                    quantity: $('#materialQuantity').val(),
+                    type: $('#materialUnit').val(),
+                    cost: $('#materialCost').val(),
+                    supplier: $('#materialSupplier').val(),
+                };
+                console.log('Material data:', formData);
+                closeMaterialModal();
+                showSuccess('Material added successfully!');
+            });
+
+            $('#materialsTable').on('click', 'tr', function () {
+                let clickedMaterial = {
+                    id: $(this).data('id'),
+                    name: $(this).find('td:first').text(),
+                    type: $(this).find('td:nth-child(2)').text(),
+                    materialCost: $(this).find('td:nth-child(3)').text().replace('$', ''),
+                    quantity: $(this).find('td:nth-child(4)').text(),
+                    supplier: $(this).find('td:nth-child(5)').text()
+                };
+                console.log('Clicked material:', clickedMaterial);
+                openMaterialModal(clickedMaterial);
+            });
+        }
+
+        function updateTotalProducts() {
+            const count = $('.item-row').length;
+            $('#totalProducts').text(count);
+        }
+
+        function openMaterialModal(material = null) {
+            const $modal = $('#materialFormContainer').addClass('active');
+
+            if (material) {
+                $('#materialId').val(material.id || '');
+                $('#materialName').val(material.name || '');
+                $('#materialQuantity').val(material.quantity || '');
+                $('#materialUnit').val(material.type || '');
+                $('#materialCost').val(material.materialCost || '');
+                $('#materialSupplier').val(material.supplier || '');
+
+                $('#materialAddBtn').addClass('d-none');
+                $('#editMaterialBtn, #deleteMaterialBtn').removeClass('d-none');
+                $modal.find('.floating-form-title').text('Edit Material');
+            } else {
+                $('#addMaterialForm')[0].reset();
+                $('#materialAddBtn').removeClass('d-none');
+                $('#editMaterialBtn, #deleteMaterialBtn').addClass('d-none');
+                $modal.find('.floating-form-title').text('Add New Material');
+            }
+        }
+        function closeMaterialModal() { $('#materialFormContainer').removeClass('active'); }
+
+        async function loadMaterials(page = 0, size = 5, search = '') {
+            const business = JSON.parse(localStorage.getItem('business') || '{"id":1}');
+            const businessId = business.id;
+            console.log("business",business)
+            const currencyType = business.currencyType;
+            $('#currencyType').text(`Price (${currencyType || '$'})`);
+            $('#currencyTypeCost').text(`Cost (${currencyType || '$'})`);
+            $('#currencyTypeProduct').text(`Price (${currencyType || '$'})`);
+            $('#currencyType').text(currencyType || '$');
+
+            console.log("currency:",business.currencyType)
+
+            try {
+                // Include search param in API call
+                const response = await apiFetch(`/api/material/getAll/${businessId}?page=${page}&size=${size}&search=${encodeURIComponent(search)}`) || {};
+                const data = response.data || {};
+                const materials = data.content || [];
+                const totalPages = data.totalPages || 1;
+                const currentPage = (data.number || 0) + 1;
+
+                const $materialsTable = $('#materialsTable tbody').empty();
+
+                // Always show table
+                $('#materials-table-container').removeClass('d-none');
+                $('#materials-empty').addClass('d-none');
+
+                if (materials.length > 0) {
+                    materials.forEach(material => {
+                        $materialsTable.append(`
+                            <tr data-id="${material.materialId}">
+                                <td>${material.name}</td>
+                                <td>${material.type || ''}</td>
+                                <td>${parseFloat(material.price || 0).toFixed(2)}</td>
+                                <td>${material.quantity || 0}</td>
+                                <td>${material.supplier || ''}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    // Show "No materials found" row
+                    $materialsTable.append(`
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No materials found</td>
+                        </tr>
+                    `);
+                }
+
+                // Pass search param to pagination
+                renderPagination('materialsPagination', totalPages, currentPage, (p) => loadMaterials(p, size, search));
+
+            } catch (error) {
+                console.error('Error fetching materials:', error);
+                $('#materialsTable tbody').empty().append(`
+                    <tr>
+                        <td colspan="5" class="text-center text-danger">Failed to load materials</td>
+                    </tr>
+                `);
+                $('#materials-table-container').removeClass('d-none');
+                $('#materials-empty').addClass('d-none');
+            }
+        }
+        
+        $('#addMaterialForm').on('submit', async function (e) {
+            e.preventDefault();
+            const formData = {
+                name: $('#materialName').val(),
+                quantity: $('#materialQuantity').val(),
+                type: $('#materialUnit').val(),
+                price: $('#materialCost').val(),
+                supplier: $('#materialSupplier').val(),
+                businessId: JSON.parse(localStorage.getItem('business') || '{"id":"demo-business"}').id
+            };
+
+            try {
+                const response = await apiFetch('/api/material/add', {
+                    headers: { 'Content-Type': 'application/json' },
+                    method: "POST",
+                    body: JSON.stringify(formData)
+                });
+
+                console.log("Material saved:", response);
+                closeMaterialModal();
+                showSuccess('Material added successfully!');
+                loadMaterials();
+            } catch (err) {
+                console.error("Failed to add material:", err);
+                showSuccess('❌ Failed to add material!');
+            }
+        });
+        $('#deleteMaterialBtn').on('click', async function () {
+            if (!showConfirm('Are you sure you want to delete this material?')) return;
+
+            const materialId = $('#materialId').val();
+            console.log('Deleting material:', materialId);
+
+            try {
+                const res = await apiFetch(`/api/material/delete/${materialId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (res && res.ok !== false) {
+                    loadMaterials();
+                    showSuccess('Material deleted successfully!');
+                } else {
+                    console.error('Delete failed', res);
+                    showSuccess('❌ Failed to delete material!');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                showSuccess('❌ Failed to delete material!');
+            }
+
+            closeMaterialModal();
+        });
+
+        $('#editMaterialBtn').on('click', async function () {
+            const updatedData = {
+                materialId: $('#materialId').val(),
+                name: $('#materialName').val(),
+                quantity: $('#materialQuantity').val(),
+                type: $('#materialUnit').val(),
+                price: $('#materialCost').val(),
+                supplier: $('#materialSupplier').val(),
+                businessId: JSON.parse(localStorage.getItem('business') || '{"id":"demo-business"}').id
+            };
+
+            console.log('Updating material:', updatedData);
+            const response = await apiFetch('/api/material/update', {
+                headers: { 'Content-Type': 'application/json' },
+                method: "PUT",
+                body: JSON.stringify(updatedData)
+            });
+            console.log('Material updated:', updatedData);
+            closeMaterialModal();
+            showSuccess('Material updated successfully!');
+            loadMaterials();
+        });
+
+
+
+        // ======================
+        // PRODUCTS MODULE
+        // ======================
+        function initProductEvents() {
+            $('#addFirstProduct, #addProductBtn').on('click', () => openProductModal());
+            $('#closeProductForm, #cancelProductForm, #productFormOverlay').on('click', closeProductModal);
+
+            $('#addProductForm').on('submit', function (e) {
+                e.preventDefault();
+                const formData = {
+                    name: $('#productName').val(),
+                    quantity: $('#productQuantity').val(),
+                    unit: $('#productUnit').val(),
+                    price: $('#productPrice').val(),
+                    cost: $('#productCost').val(),
+                };
+                console.log('Product data:', formData);
+                closeProductModal();
+                showSuccess('Product added successfully!');
+            });
+            $('#productsTable').on('click', 'tr', function () {
+                let clickedProduct = {
+                    id: $(this).data('id'),
+                    name: $(this).find('td:first').text(),
+                    price: $(this).find('td:nth-child(3)').text().replace('$', ''),
+                    cost: $(this).find('td:nth-child(2)').text().replace('$', ''),
+                    quantity: $(this).find('td:nth-child(4)').text(),
+                    material:$(this).find('td:nth-child(5)').text()
+                };
+                console.log('Clicked product:', clickedProduct);
+                openProductModal(clickedProduct);
+            });
+        }
+
+       function openProductModal(product = null) {
+            const $modal = $('#productFormContainer').addClass('active');
+            const $materialsContainer = $('.order-items');
+            $materialsContainer.empty();
+
+            let business = JSON.parse(localStorage.getItem('business'));
+            const businessId = business.id;
+            console.log("id:",business.id)
+
+            apiFetch(`/api/material/getAllList/${businessId}`).then(response => {
+                const allMaterials = response.data || [];
+                console.log("allmaterials:",allMaterials)
+
+           // Generate dropdown options
+                const createOptions = (selectedId) => {
+                    return allMaterials.map(material => {
+                        const isSelected = material.name === selectedId ? 'selected' : '';
+                        console.log(isSelected);
+                        return `<option value="${material.materialId}" ${isSelected}>${material.name}</option>`;
+                    }).join('');
+                };
+
+                // Add a material row
+                const addMaterialRow = (selectedId = null, quantity = null) => {
+                    console.log("selectedID:", selectedId);
+                    console.log("quantity:", parseFloat.quantity);
+
+                    const $row = $(`
+                        <div class="item-row mb-2 d-flex align-items-end gap-2">
+                            <div class="flex-grow-1">
+                                <label class="form-label">Material</label>
+                                <select class="form-select material-select" required>
+                                    <option value="" disabled ${selectedId ? '' : 'selected'}>Select a material</option>
+                                    ${createOptions(selectedId)}
+                                </select>
+                            </div>
+                            <div style="width:100px;">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control material-qty" value="${quantity}" min="0.00001" step="0.00001" required>
+                            </div>
+                            <button type="button" class="remove-item btn btn-outline-danger">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    `);
+
+                    // Remove row on click
+                    $row.find('.remove-item').click(() => $row.remove());
+
+                    // Append row to container
+                    $materialsContainer.append($row);
+                };
+
+
+                if (product) {
+                    $('#productId').val(product.id || '');
+                    $('#productName').val(product.name || '');
+                    $('#productQuantity').val(product.quantity || '');
+                    $('#productUnit').val(product.unit || '');
+                    $('#productPrice').val(product.price || '');
+                    $('#productCost').val(product.cost || '');
+
+                    console.log("product:", product);
+
+                    // materialsContainer.empty();
+                    console.log("materials array:",parseMaterials(product.material))
+
+                    parseMaterials(product.material).forEach(m => {
+                        console.log("array :",m.name, m.quantity)
+                        addMaterialRow(m.name, m.quantity);
+                    });
+
+                    $('#productAddBtn').addClass('d-none');
+                    $('#editProductBtn, #deleteProductBtn').removeClass('d-none');
+                    $modal.find('.floating-form-title').text('Edit Product');
+                } else {
+                    $('#addProductForm')[0].reset();
+                    // materialsContainer.empty();
+                    addMaterialRow();
+
+                    $('#productAddBtn').removeClass('d-none');
+                    $('#editProductBtn, #deleteProductBtn').addClass('d-none');
+                    $modal.find('.floating-form-title').text('Add New Product');
+                }
+
+                $('.add-material').off('click').on('click', function () {
+                    addMaterialRow();
+                });
+            }).catch(err => {
+                console.error('Failed to fetch materials:', err);
+                showSuccess('❌ Failed to load materials');
+            });
+        }
+
+            function closeProductModal() { $('#productFormContainer').removeClass('active'); }
+
+            async function loadProducts(page = 0, size = 5, search = '') {
+                const business = JSON.parse(localStorage.getItem('business') || '{"id":1,"name":"Demo Business"}');
+                const businessId = business.id;
+            
+                try {
+                    // Fetch paginated products with optional search
+                    const response = await apiFetch(`/api/product/getAll/${businessId}?page=${page}&size=${size}&search=${encodeURIComponent(search)}`) || {};
+                    const data = response.data || {};
+                    const products = data.content || [];
+                    const totalPages = data.totalPages || 1;
+                    const currentPage = (data.number || 0) + 1;
+
+                    console.log('Fetched products:', data);
+
+                    const materialResponse = await apiFetch(`/api/material/getAllList/${businessId}`) || {};
+                    const allMaterials = materialResponse.data || [];
+
+                    console.log("material:")
+
+                    const $productsTable = $('#productsTable tbody').empty();
+
+                    // Always show table even if no results
+                    $('#products-table-container').removeClass('d-none');
+                    $('#products-empty').addClass('d-none');
+
+                    if (products.length > 0) {
+                        products.forEach(product => {
+                            let productCost = 0;
+                            const usedMaterialsList = [];
+
+                            (product.productMaterials || []).forEach(pm => {
+                                if (pm.materialId) {
+                                    const material = allMaterials.find(m => Number(m.materialId) === Number(pm.materialId));
+                                    if (material) {
+                                        productCost += parseFloat(pm.quantityUsed || 0) * parseFloat(material.price || 0);
+                                        usedMaterialsList.push(`${material.name} (${pm.quantityUsed})`);
+                                    }
+                                }
+                            });
+
+                            const materialsDisplay = usedMaterialsList.length > 0 ? usedMaterialsList.join(", ") : "—";
+
+                            $productsTable.append(`
+                                <tr data-id="${product.productId}" data-materials='${JSON.stringify(product.productMaterials || [])}'>
+                                    <td>${product.name}</td>
+                                    <td>${productCost.toFixed(2)}</td>
+                                    <td>${parseFloat(product.price || 0).toFixed(2)}</td>
+                                    <td>${parseFloat(product.quantity || 0)}</td>
+                                    <td style="display: none;">${materialsDisplay}</td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        // Show "No products found" row
+                        $productsTable.append(`
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No products found</td>
+                            </tr>
+                        `);
+                    }
+
+                    // Render pagination (even for empty results, show single page)
+                    renderPagination('productsPagination', totalPages, currentPage, (p) => loadProducts(p, size, search));
+
+                } catch (error) {
+                    console.error('Error fetching products or materials:', error);
+                    $('#productsTable tbody').empty().append(`
+                        <tr>
+                            <td colspan="5" class="text-center text-danger">Failed to load products</td>
+                        </tr>
+                    `);
+                    $('#products-table-container').removeClass('d-none');
+                    $('#products-empty').addClass('d-none');
+                }
+            }
+            $('#addProductForm').on('submit', async function (e) {
+            e.preventDefault();
+
+            try {
+                const productMaterials = [];
+                $('.item-row').each(function () {
+                    const materialId = $(this).find('.material-select').val();
+                    const quantityUsed = parseFloat($(this).find('.material-qty').val());
+                    if (materialId && quantityUsed) {
+                        productMaterials.push({
+                            materialId: parseInt(materialId),
+                            quantityUsed: quantityUsed
+                        });
+                    }
+                });
+
+                const business = JSON.parse(localStorage.getItem('business') || '{"id":1}');
+                const formData = {
+                    name: $('#productName').val(),
+                    quantity: parseFloat($('#productQuantity').val()),
+                    price: parseFloat($('#productPrice').val()),
+                    businessId: business.id,
+                    productMaterials: productMaterials
+                };
+
+                const response = await apiFetch('/api/product/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                console.log('Product added:', response);
+                closeProductModal();
+                showSuccess('✅ Product added successfully!');
+                await loadProducts(),loadMaterials();
+
+            } catch (err) {
+                console.error('Failed to add product:', err);
+                showSuccess('❌ Failed to add product!');
+            }
+        });
+        
+        $('#editProductBtn').on('click', async function (e) {
+            e.preventDefault();
+
+            try {
+                const productMaterials = [];
+                $('.item-row').each(function () {
+                    const materialId = $(this).find('.material-select').val();
+                    const quantityUsed = parseFloat($(this).find('.material-qty').val());
+                    if (materialId && quantityUsed) {
+                        productMaterials.push({
+                            materialId: parseInt(materialId),
+                            quantityUsed: quantityUsed
+                        });
+                    }
+                });
+
+                const business = JSON.parse(localStorage.getItem('business') || '{"id":1}');
+                const formData = {
+                    productId: parseInt($('#productId').val()), // Must exist for update
+                    name: $('#productName').val(),
+                    quantity: parseFloat($('#productQuantity').val()),
+                    price: parseFloat($('#productPrice').val()),
+                    businessId: business.id,
+                    productMaterials: productMaterials
+                };
+
+                const response = await apiFetch('/api/product/update', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                console.log('Product updated:', response);
+                closeProductModal();
+                showSuccess('✅ Product updated successfully!');
+                await loadProducts();
+
+            } catch (err) {
+                console.error('Failed to update product:', err);
+                showSuccess('❌ Failed to update product!');
+            }
+        });
+
+
+
+       $('#deleteProductBtn').on('click', function () {
+        const productId = $('#productId').val();
+        console.log('Preparing to delete product:', productId);
+
+        showConfirm(
+            'Are you sure you want to delete this product?',
+            async () => { // Accept callback
+                try {
+                    const res = await apiFetch(`/api/product/delete/${productId}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (res && res.ok !== false) {
+                        showSuccess('✅ Product deleted successfully!');
+                        await loadProducts(); // refresh table
+                    } else {
+                        console.error('Delete failed', res);
+                        showSuccess('❌ Failed to delete product!');
+                    }
+                } catch (err) {
+                    console.error('Delete error:', err);
+                    showSuccess('❌ Failed to delete product!');
+                } finally {
+                    closeProductModal();
+                    updateStats();
+                }
+            },
+            () => { // Decline callback
+                console.log('Delete cancelled');
+            }
+        );
+    });
+
+
+
+
+        // ======================
+        // SHARED UTILITIES
+        // ======================
+        function initSidebar() {
+            const $sidebar = $('#sidebar');
+            const $mainContent = $('#mainContent');
+            const $overlay = $('#overlay');
+
+            $('#sidebarToggle').on('click', function () {
+                if ($(window).width() < 992) {
+                    $sidebar.toggleClass('mobile-visible');
+                    $overlay.toggleClass('visible');
+                } else {
+                    $sidebar.toggleClass('collapsed');
+                    $mainContent.toggleClass('expanded');
+                }
+            });
+
+            $overlay.on('click', function () {
+                $sidebar.removeClass('mobile-visible');
+                $overlay.removeClass('visible');
+            });
+        }
+
+        function initTabs() {
+            $('.tab-nav-link').on('click', function (e) {
+                e.preventDefault();
+                const tabId = $(this).data('tab');
+                $('.tab-nav-link').removeClass('active');
+                $('.tab-content').removeClass('active');
+                $(this).addClass('active');
+                $('#' + tabId).addClass('active');
+            });
+        }
+
+        function showSuccess(message) {
+            const $toast = $(`
+                <div class="position-fixed top-0 end-0 p-3" style="z-index:9999">
+                    <div class="toast show" role="alert">
+                        <div class="toast-header">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong class="me-auto">Success</strong>
+                        </div>
+                        <div class="toast-body">${message}</div>
+                    </div>
+                </div>
+            `);
+            $('body').append($toast);
+            setTimeout(() => $toast.remove(), 3000);
+        }
+
+    function showConfirm(message, onAccept, onDecline) {
+            const $toast = $(`
+                <div class="position-fixed top-0 end-0 p-3" style="z-index:9999">
+                    <div class="toast show" role="alert" style="min-width: 250px;">
+                        <div class="toast-header">
+                            <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                            <strong class="me-auto">Confirm</strong>
+                        </div>
+                        <div class="toast-body d-flex flex-column gap-2">
+                            <span>${message}</span>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-success btn-sm accept-btn">Yes</button>
+                                <button class="btn btn-danger btn-sm decline-btn">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+        $('body').append($toast);
+
+        $toast.find('.accept-btn').on('click', () => {
+            if (onAccept) onAccept();
+            $toast.remove();
+        });
+
+        $toast.find('.decline-btn').on('click', () => {
+            if (onDecline) onDecline();
+            $toast.remove();
+        });
+
+        // Optional: auto-remove after 10 seconds if no response
+        setTimeout(() => $toast.remove(), 10000);
+    }
+
+
+    async function updateStats() {
+        try {
+            // Get business from localStorage
+            const business = JSON.parse(localStorage.getItem('business') || '{}');
+            if (!business.id) {
+                console.error("No business selected");
+                return;
+            }
+            const businessId = business.id;
+
+            // Fetch products
+            const productRes = await apiFetch(`/api/product/getAllList/${businessId}`);
+            const products = Array.isArray(productRes?.data) ? productRes.data : [];
+            console.log("Products", products);
+
+            // Fetch materials
+            const materialRes = await apiFetch(`/api/material/getAllList/${businessId}`);
+            const materials = Array.isArray(materialRes?.data) ? materialRes.data : [];
+            console.log("Materials", materials);
+
+            // Count totals
+            const totalProducts = products.length;
+            const totalMaterials = materials.length;
+
+            // Stock checks
+            let lowStockProducts = 0;
+            let outOfStockProducts = 0;
+            let lowStockMaterials = 0;
+            let outOfStockMaterials = 0;
+
+            // Check products stock
+            products.forEach(p => {
+                const qty = Number(p.quantity || 0);
+                const minStock = 10; // fallback minStock for products
+
+                if (qty === 0) {
+                    outOfStockProducts++;
+                } else if (qty <= minStock) {
+                    lowStockProducts++;
+                }
+            });
+
+            // Check materials stock
+            materials.forEach(m => {
+                const qty = Number(m.quantity || 0);
+                const minStock = 20; // fallback minStock for materials
+
+                if (qty === 0) {
+                    outOfStockMaterials++;
+                } else if (qty <= minStock) {
+                    lowStockMaterials++;
+                }
+            });
+
+            // Update DOM
+            $('#totalProducts').text(totalProducts);
+            $('#totalMaterials').text(totalMaterials);
+            $('#lowStockProducts').text(lowStockProducts);
+            $('#outOfStockProducts').text(outOfStockProducts);
+            $('#lowStockMaterials').text(lowStockMaterials);
+            $('#outOfStockMaterials').text(outOfStockMaterials);
+
+        } catch (err) {
+            console.error("Error updating stats:", err);
+        }
+    }
+
+        function parseMaterials(materialStr) {
+            if (!materialStr) return [];
+            
+            return materialStr.split(',').map(item => {
+                // Match "name (number)" where number can be int or float
+                let match = item.trim().match(/^(.*?)\s*\(([\d.]+)\)$/);
+                if (match) {
+                    return {
+                        name: match[1].trim(),
+                        quantity: parseFloat(match[2])  // works for 1, 2, 0.24, 0.28
+                    };
+                }
+                return { name: item.trim(), quantity: 1 };
+            });
+        }
+        function renderPagination(containerId, totalPages, currentPage, callback) {
+            const $container = $(`#${containerId}`).empty();
+
+            for (let i = 0; i < totalPages; i++) {
+                const $pageItem = $(`
+                    <li class="page-item ${i+1 === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#">${i + 1}</a>
+                    </li>
+                `);
+                $pageItem.on('click', function (e) {
+                    e.preventDefault();
+                    callback(i); // loadMaterials(i)
+                });
+                $container.append($pageItem);
+            }
+        }
+      
+        $('#productSearch').on('input', function () {
+            const query = $(this).val().trim();
+            loadProducts(0, 5, query); // Reset to page 0
+        });
+        $('#materialSearch').on('input', function () {
+            const query = $(this).val().trim();
+            loadMaterials(0, 5, query); // Reset to page 0
+        });
+        $('#logoutBtn').on('click', async function() {
+    // If using your auth module:
+            if (typeof logout === 'function') {
+                await logout(); // calls the logout function defined in auth.js
+            } else {
+                // Fallback: clear tokens manually
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('user');
+                window.location.href = '/index.html';
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BizManager Pro - Employees</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4a6fc0;
+      --primary-light: rgba(74, 111, 192, 0.1);
+      --secondary-color: #6c757d;
+      --success-color: #198754;
+      --info-color: #0dcaf0;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 280px;
+      background: linear-gradient(180deg, var(--primary-color), #3b5aa6);
+      color: white;
+      z-index: 1000;
+      transition: var(--transition);
+      box-shadow: var(--card-shadow);
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin: 4px 0;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+      margin-right: 12px;
+    }
+
+    .user-avatar {
+      width: 45px;
+      height: 45px;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: var(--transition);
+      padding: 20px;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* Card Styles */
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      background-color: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 1.25rem 1.5rem;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Table Styles */
+    .table th {
+      font-weight: 600;
+      border-top: none;
+      border-bottom: 2px solid var(--primary-color);
+      color: var(--dark-color);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: var(--primary-light);
+    }
+
+    /* Badge Styles */
+    .badge {
+      font-weight: 500;
+      padding: 0.5em 0.75em;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    /* Employee Avatar */
+    .employee-avatar {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* Stats Cards */
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .stat-card .label {
+      color: var(--secondary-color);
+      font-size: 0.875rem;
+    }
+
+    /* Top Employees Section */
+    .top-employees {
+      margin-bottom: 1.5rem;
+    }
+    
+    .top-employee-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      transition: var(--transition);
+    }
+    
+    .top-employee-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .top-employee-item:last-child {
+      border-bottom: none;
+    }
+    
+    .employee-rank {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      margin-right: 1rem;
+    }
+    
+    .employee-details {
+      flex-grow: 1;
+    }
+    
+    .employee-performance {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 260px;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 15px;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate__fadeIn {
+      animation: fadeIn 0.6s ease-in;
+    }
+  </style>
+</head>
+<body>
+<!-- Sidebar Overlay (Mobile) -->
+<div class="sidebar-overlay"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="d-flex flex-column h-100 p-3">
+    <!-- Logo -->
+    <div class="py-3 mb-3">
+      <div class="logo">BizManager Pro</div>
+    </div>
+
+    <nav class="nav flex-column mb-auto">
+      <a class="nav-link mb-2" href="/pages/dashboard.html">
+        <i class="bi bi-speedometer2"></i>Dashboard
+      </a>
+      <a class="nav-link mb-2" href="/pages/inventory.html">
+        <i class="bi bi-box-seam"></i>Inventory
+      </a>
+      <a class="nav-link mb-2" href="/pages/orders.html">
+        <i class="bi bi-cart"></i>Orders
+      </a>
+      <a class="nav-link mb-2" href="/pages/finance.html">
+        <i class="bi bi-graph-up"></i>Finance
+      </a>
+      <a class="nav-link mb-2" href="/pages/customers.html">
+        <i class="bi bi-people"></i>Customers
+      </a>
+      <a class="nav-link mb-2 active" href="/pages/employees.html">
+        <i class="bi bi-person-badge"></i>Employees
+      </a>
+      <a class="nav-link mb-2" href="/pages/settings.html">
+        <i class="bi bi-gear"></i>Settings
+      </a>
+    </nav>
+
+    <!-- User Profile -->
+    <div class="mt-auto">
+      <div class="d-flex align-items-center p-3 rounded" style="background-color: var(--primary-light);">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar rounded-circle me-3" alt="User">
+        <div>
+          <div class="fw-bold">User Name</div>
+          <small class="text-muted">Administrator</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="container-fluid p-4">
+    <!-- Mobile Header -->
+    <div class="d-lg-none d-flex justify-content-between align-items-center mb-4">
+      <button class="btn btn-outline-primary" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+      </button>
+      <h5 class="mb-0">Employees</h5>
+      <div></div> <!-- Spacer -->
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="mb-1">Employee Management</h4>
+          <p class="text-muted mb-0">Manage your employee database and records</p>
+        </div>
+        <div>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <i class="bi bi-plus-circle me-2"></i>Add New Employee
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="row mb-4">
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stat-card animate__fadeIn">
+          <div class="value">0</div>
+          <div class="label">Total Employees</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stat-card animate__fadeIn">
+          <div class="value">0</div>
+          <div class="label">Active Employees</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stat-card animate__fadeIn">
+          <div class="value">$0</div>
+          <div class="label">Avg. Salary</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stat-card animate__fadeIn">
+          <div class="value">0</div>
+          <div class="label">New This Month</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Employees by Performance -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card animate__fadeIn">
+          <div class="card-header">
+            <h5 class="mb-0">Top Performing Employees</h5>
+          </div>
+          <div class="card-body">
+            <div class="top-employees" id="topEmployeesList">
+              <div class="text-center py-5">
+                <i class="bi bi-person-badge display-4 text-muted mb-3"></i>
+                <p class="text-muted">No employee data available</p>
+                <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                  <i class="bi bi-plus-circle me-2"></i>Add First Employee
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="searchInput" class="form-label">Search</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="Search employees...">
+        </div>
+        <div class="col-md-2">
+          <label for="departmentFilter" class="form-label">Department</label>
+          <select class="form-select" id="departmentFilter">
+            <option value="">All Departments</option>
+            <option value="sales">Sales</option>
+            <option value="marketing">Marketing</option>
+            <option value="it">IT</option>
+            <option value="hr">Human Resources</option>
+            <option value="finance">Finance</option>
+            <option value="operations">Operations</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="statusFilter" class="form-label">Status</label>
+          <select class="form-select" id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="on-leave">On Leave</option>
+            <option value="terminated">Terminated</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="sortBy" class="form-label">Sort By</label>
+          <select class="form-select" id="sortBy">
+            <option value="name">Name</option>
+            <option value="department">Department</option>
+            <option value="performance">Performance</option>
+            <option value="salary">Salary</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-outline-secondary w-100">
+            <i class="bi bi-funnel me-1"></i> Filter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employees Table -->
+    <div class="card animate__fadeIn">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Employees</h5>
+        <div class="d-flex">
+          <button class="btn btn-sm btn-outline-secondary me-2">
+            <i class="bi bi-download me-1"></i> Export
+          </button>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="bi bi-list-check me-1"></i> Columns
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Name</div></a></li>
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Department</div></a></li>
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Position</div></a></li>
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Email</div></a></li>
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Phone</div></a></li>
+              <li><a class="dropdown-item" href="#"><div class="form-check"><input class="form-check-input" type="checkbox" checked> Status</div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="employeesTableBody">
+              <tr>
+                <td colspan="7" class="text-center py-5">
+                  <i class="bi bi-person-badge display-4 text-muted mb-3"></i>
+                  <p class="text-muted">No employees found</p>
+                  <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                    <i class="bi bi-plus-circle me-2"></i>Add First Employee
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Employee pagination">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item disabled">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addEmployeeForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="tel" class="form-control" id="phone">
+            </div>
+            <div class="col-md-6">
+              <label for="department" class="form-label">Department</label>
+              <select class="form-select" id="department" required>
+                <option value="">Select Department</option>
+                <option value="sales">Sales</option>
+                <option value="marketing">Marketing</option>
+                <option value="it">IT</option>
+                <option value="hr">Human Resources</option>
+                <option value="finance">Finance</option>
+                <option value="operations">Operations</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="position" class="form-label">Position</label>
+              <input type="text" class="form-control" id="position" required>
+            </div>
+            <div class="col-md-6">
+              <label for="salary" class="form-label">Salary ($)</label>
+              <input type="number" class="form-control" id="salary" min="0" step="0.01">
+            </div>
+            <div class="col-md-6">
+              <label for="hireDate" class="form-label">Hire Date</label>
+              <input type="date" class="form-control" id="hireDate">
+            </div>
+            <div class="col-md-6">
+              <label for="status" class="form-label">Status</label>
+              <select class="form-select" id="status">
+                <option value="active">Active</option>
+                <option value="on-leave">On Leave</option>
+                <option value="terminated">Terminated</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="performance" class="form-label">Performance Rating</label>
+              <select class="form-select" id="performance">
+                <option value="excellent">Excellent</option>
+                <option value="good">Good</option>
+                <option value="average">Average</option>
+                <option value="needs-improvement">Needs Improvement</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="notes" class="form-label">Notes</label>
+              <textarea class="form-control" id="notes" rows="3"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveEmployeeBtn">Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script>
+  // Employee data storage
+  let employees = JSON.parse(localStorage.getItem('employees')) || [];
+  let employeeIdCounter = parseInt(localStorage.getItem('employeeIdCounter')) || 1;
+
+  // Toggle sidebar on mobile
+  document.getElementById('sidebarToggle').addEventListener('click', function() {
+    document.querySelector('.sidebar').classList.toggle('active');
+    document.querySelector('.sidebar-overlay').classList.toggle('active');
+  });
+
+  // Close sidebar when clicking on overlay
+  document.querySelector('.sidebar-overlay').addEventListener('click', function() {
+    this.classList.remove('active');
+    document.querySelector('.sidebar').classList.remove('active');
+  });
+
+  // Initialize tooltips
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  });
+
+  // Save employee function
+  document.getElementById('saveEmployeeBtn').addEventListener('click', function() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
+    const department = document.getElementById('department').value;
+    const position = document.getElementById('position').value;
+    const status = document.getElementById('status').value;
+    
+    if (firstName && lastName && email && department && position) {
+      const newEmployee = {
+        id: employeeIdCounter++,
+        firstName,
+        lastName,
+        email,
+        phone: document.getElementById('phone').value,
+        department,
+        position,
+        salary: document.getElementById('salary').value ? parseFloat(document.getElementById('salary').value) : 0,
+        hireDate: document.getElementById('hireDate').value,
+        status,
+        performance: document.getElementById('performance').value,
+        avatar: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 50)}.jpg`
+      };
+      
+      employees.push(newEmployee);
+      localStorage.setItem('employees', JSON.stringify(employees));
+      localStorage.setItem('employeeIdCounter', employeeIdCounter);
+      
+      // Close modal and reset form
+      bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal')).hide();
+      document.getElementById('addEmployeeForm').reset();
+      
+      // Refresh employee displays
+      renderEmployeesTable();
+      renderTopEmployees();
+      updateStats();
+    } else {
+      alert('Please fill in all required fields (First Name, Last Name, Email, Department, Position)');
+    }
+  });
+
+  // Render employees table
+  function renderEmployeesTable() {
+    const tableBody = document.getElementById('employeesTableBody');
+    
+    if (employees.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center py-5">
+            <i class="bi bi-person-badge display-4 text-muted mb-3"></i>
+            <p class="text-muted">No employees found</p>
+            <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+              <i class="bi bi-plus-circle me-2"></i>Add First Employee
+            </button>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    let tableHTML = '';
+    
+    employees.forEach(employee => {
+      const statusBadge = getStatusBadge(employee.status);
+      
+      tableHTML += `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="${employee.avatar}" class="employee-avatar me-3" alt="Employee">
+              <div>
+                <div class="fw-bold">${employee.firstName} ${employee.lastName}</div>
+                <small class="text-muted">ID: EMP-${employee.id.toString().padStart(3, '0')}</small>
+              </div>
+            </div>
+          </td>
+          <td>${employee.department}</td>
+          <td>${employee.position}</td>
+          <td>${employee.email}</td>
+          <td>${employee.phone || 'N/A'}</td>
+          <td>${statusBadge}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary btn-action" data-bs-toggle="tooltip" title="View">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary btn-action" data-bs-toggle="tooltip" title="Edit">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger btn-action" data-bs-toggle="tooltip" title="Delete" onclick="deleteEmployee(${employee.id})">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+    
+    tableBody.innerHTML = tableHTML;
+    
+    // Reinitialize tooltips for new elements
+    tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+  }
+
+  // Render top employees by performance
+  function renderTopEmployees() {
+    const topEmployeesContainer = document.getElementById('topEmployeesList');
+    
+    if (employees.length === 0) {
+      topEmployeesContainer.innerHTML = `
+        <div class="text-center py-5">
+          <i class="bi bi-person-badge display-4 text-muted mb-3"></i>
+          <p class="text-muted">No employee data available</p>
+          <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <i class="bi bi-plus-circle me-2"></i>Add First Employee
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    // Sort employees by performance (for demo, we'll use a random metric)
+    const sortedEmployees = [...employees].sort((a, b) => {
+      const perfValues = { 'excellent': 4, 'good': 3, 'average': 2, 'needs-improvement': 1 };
+      return (perfValues[b.performance] || 0) - (perfValues[a.performance] || 0);
+    });
+    
+    let topEmployeesHTML = '';
+    
+    sortedEmployees.slice(0, 5).forEach((employee, index) => {
+      const perfBadge = getPerformanceBadge(employee.performance);
+      
+      topEmployeesHTML += `
+        <div class="top-employee-item">
+          <div class="employee-rank">${index + 1}</div>
+          <img src="${employee.avatar}" class="employee-avatar me-3" alt="Employee">
+          <div class="employee-details">
+            <div class="fw-bold">${employee.firstName} ${employee.lastName}</div>
+            <small class="text-muted">${employee.position}</small>
+          </div>
+          <div class="employee-performance">${perfBadge}</div>
+        </div>
+      `;
+    });
+    
+    topEmployeesContainer.innerHTML = topEmployeesHTML;
+  }
+
+  // Update stats cards
+  function updateStats() {
+    const totalEmployees = employees.length;
+    const activeEmployees = employees.filter(emp => emp.status === 'active').length;
+    const newThisMonth = employees.filter(emp => {
+      // For demo purposes, let's assume employees added in the last 30 days are "new this month"
+      return Math.random() > 0.7; // Randomly mark some as new
+    }).length;
+    
+    const totalSalary = employees.reduce((sum, emp) => sum + (emp.salary || 0), 0);
+    const avgSalary = totalEmployees > 0 ? totalSalary / totalEmployees : 0;
+    
+    document.querySelectorAll('.stat-card .value')[0].textContent = totalEmployees;
+    document.querySelectorAll('.stat-card .value')[1].textContent = activeEmployees;
+    document.querySelectorAll('.stat-card .value')[2].textContent = `$${avgSalary.toFixed(2)}`;
+    document.querySelectorAll('.stat-card .value')[3].textContent = newThisMonth;
+  }
+
+  // Get status badge HTML
+  function getStatusBadge(status) {
+    const statusClasses = {
+      active: 'bg-success',
+      'on-leave': 'bg-warning text-dark',
+      terminated: 'bg-danger'
+    };
+    
+    const statusText = {
+      active: 'Active',
+      'on-leave': 'On Leave',
+      terminated: 'Terminated'
+    };
+    
+    return `<span class="badge ${statusClasses[status]}">${statusText[status]}</span>`;
+  }
+
+  // Get performance badge HTML
+  function getPerformanceBadge(performance) {
+    const perfClasses = {
+      excellent: 'bg-success',
+      good: 'bg-primary',
+      average: 'bg-info',
+      'needs-improvement': 'bg-warning text-dark'
+    };
+    
+    const perfText = {
+      excellent: 'Excellent',
+      good: 'Good',
+      average: 'Average',
+      'needs-improvement': 'Needs Improvement'
+    };
+    
+    return `<span class="badge ${perfClasses[performance]}">${perfText[performance]}</span>`;
+  }
+
+  // Delete employee function
+  function deleteEmployee(id) {
+    if (confirm('Are you sure you want to delete this employee?')) {
+      employees = employees.filter(employee => employee.id !== id);
+      localStorage.setItem('employees', JSON.stringify(employees));
+      renderEmployeesTable();
+      renderTopEmployees();
+      updateStats();
+    }
+  }
+
+  // Search functionality
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#employeesTableBody tr');
+    
+    rows.forEach(row => {
+      if (row.cells.length > 1) {
+        const name = row.cells[0].querySelector('.fw-bold').textContent.toLowerCase();
+        const department = row.cells[1].textContent.toLowerCase();
+        const position = row.cells[2].textContent.toLowerCase();
+        const email = row.cells[3].textContent.toLowerCase();
+        
+        if (name.includes(searchValue) || department.includes(searchValue) || 
+            position.includes(searchValue) || email.includes(searchValue)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+  });
+
+  // Filter functionality
+  document.getElementById('departmentFilter').addEventListener('change', function() {
+    const deptValue = this.value;
+    const statusValue = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('#employeesTableBody tr');
+    
+    rows.forEach(row => {
+      if (row.cells.length > 1) {
+        const department = row.cells[1].textContent.toLowerCase();
+        const status = row.cells[5].querySelector('.badge').textContent.toLowerCase();
+        
+        const deptMatch = !deptValue || department === deptValue;
+        const statusMatch = !statusValue || status === statusValue;
+        
+        if (deptMatch && statusMatch) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+  });
+
+  document.getElementById('statusFilter').addEventListener('change', function() {
+    document.getElementById('departmentFilter').dispatchEvent(new Event('change'));
+  });
+
+  // Initialize page
+  document.addEventListener('DOMContentLoaded', function() {
+    renderEmployeesTable();
+    renderTopEmployees();
+    updateStats();
+  });
+</script>
+</body>
+</html>
