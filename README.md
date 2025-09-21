@@ -45,7 +45,7 @@ A full-stack **Business Management System** built to streamline inventory, order
 (Add your screenshots here by uploading them to the repo and linking:)
 
 ```
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./screenshots/Screenshot 2025-09-21 at 22.00.59.png)
 ![Inventory](./screenshots/inventory.png)
 ```
 
