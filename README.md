@@ -53,7 +53,7 @@ A full-stack **Business Management System** built to streamline inventory, order
 
 ## 🎥 Demo Video
 
-👉 [Watch the demo video here](#)
+👉 https://youtu.be/U9WpfSUPwgo
 
 ---
 
